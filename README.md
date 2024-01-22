@@ -7,10 +7,12 @@ A simple custom app to control a WLED lightstrip in a friend's coffee shop.
 
 2. Run the config_creator.py script to generate the config variables:
 
-''' python config_creator.py '''
+```python config_creator.py
+```
 
 3. Run the stoplight_control.py script to start the app:
 
-''' python stoplight_control.py '''
+```python stoplight_control.py
+```
 
 #That's it! The app should be running now.
