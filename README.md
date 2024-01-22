@@ -17,8 +17,5 @@ python config_creator.py
 python stoplight_control.py
 ```
 
-#That's it! The app should be running now.
+That's it! The app should be running now.
 
-IN a bash terminal, you can run the following command to see the app running:
-
-```bash 
