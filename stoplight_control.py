@@ -27,9 +27,9 @@ end_time = config['end_time']
 #run the loop while the current time is between the start and end times
 while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= end_time:
     
-    green_light = "00:00"
-    yellow_light = "55:00"
-    red_light = "58:00"
+    green_light = "01:00"
+    yellow_light = "59:00"
+    red_light = "00:00"
 
     #define the minute number and seconds that each stage begins at
     green_light_minute = datetime.strptime(green_light, "%M:%S")
