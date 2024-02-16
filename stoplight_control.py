@@ -43,22 +43,19 @@ while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= e
     logging.info(f"Time: {time.strftime('%H:%M:%S')}, Date: {time.strftime('%m/%d/%Y')}")
     logging.info(f"Current minute: {current_minute}")
 
-    if current_minute >= yellow_light_minute and current_minute < red_light_minute:
+    if current_minute >= green_light_minute and current_minute < yellow_light_minute:
+        stoplight.greenlight()
+        print("Green light on")
+        sleep_time = yellow_light_minute - current_minute
+    elif current_minute >= yellow_light_minute and current_minute < red_light_minute:
         stoplight.yellowlight()
         print("Yellow light on")
         sleep_time = red_light_minute - current_minute
-    elif current_minute >= red_light_minute:
+    elif current_minute >= red_light_minute or current_minute < green_light_minute:
         stoplight.redlight()
         print("Red light on")
-        sleep_time = datetime.strptime("59:59", "%M:%S") - current_minute
-    elif current_minute >= green_light_minute and current_minute < yellow_light_minute:
-        stoplight.greenlight()
-        print("Green light on")
-        #subtract current minute and second from the current hour and 55 minutes
-        sleep_time = yellow_light_minute - current_minute  # Sleep until the next hour
-
-    
-    
+        sleep_time = (datetime.strptime("59:59", "%M:%S") - current_minute) if current_minute >= red_light_minute else (green_light_minute - current_minute)
+        
     print(f"Sleeping for {sleep_time.total_seconds()} seconds")
     logging.info(f"Sleeping for {sleep_time.total_seconds()} seconds")
     #Convert the minute value to an integer
