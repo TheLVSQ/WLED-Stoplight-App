@@ -1,7 +1,11 @@
 """_summary_
 """
 
-import logging, requests, json
+import logging
+import requests
+import json
+import time
+from datetime import datetime
 
 
 class Wled_Strip():
@@ -18,7 +22,7 @@ class Wled_Strip():
         data_off = [{'id': seg_id, "on": False} for seg_id in off_segments]
 
         # Update the WLED strip
-        url = "http://" + self.server_ip + "/json/state"
+        url = "http://" + self.server_ip + "json/state"
         payload = json.dumps({
             "on": True,
             "bri": 255,
@@ -29,6 +33,8 @@ class Wled_Strip():
             'content-Type': 'application/json'
         }
         response = requests.post(url, data=payload, headers=headers)
+        #log the time and the response from the WLED strip
+        logging.info(f"Time: {time.strftime('%H:%M:%S')}, Response: {response.json()}")
         print(response.json())
 
     def redlight(self):
