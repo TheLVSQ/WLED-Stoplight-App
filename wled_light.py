@@ -22,7 +22,7 @@ class Wled_Strip():
         data_off = [{'id': seg_id, "on": False} for seg_id in off_segments]
 
         # Update the WLED strip
-        url = "http://" + self.server_ip + "json/state"
+        url = "http://" + self.server_ip + "/json/state"
         payload = json.dumps({
             "on": True,
             "bri": 255,
