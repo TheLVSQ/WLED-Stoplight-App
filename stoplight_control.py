@@ -13,12 +13,12 @@ def countdown(seconds):
     start_time = time.time()
     remaining = seconds
     while remaining > 0:
-        sys.stdout.write(f'{remaining} seconds remaining...')
+        print(f'\b{remaining} seconds remaining...')
         sys.stdout.flush()  # Ensure the output is updated immediately
         time.sleep(10)  # Wait for 10 seconds
         elapsed = time.time() - start_time
         remaining = seconds - int(elapsed)
-    sys.stdout.write('\rDone!\n')  # Overwrite the last line with "Done!"
+    print('Done!')  # Overwrite the last line with "Done!"
 
 #log the time and date of start up
 logging.basicConfig(filename='stoplight.log', level=logging.INFO) 
