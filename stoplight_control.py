@@ -66,6 +66,8 @@ while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= e
     logging.info(f"Sleeping for {sleep_time.total_seconds()} seconds")
     #Convert the minute value to an integer
     time.sleep(round((sleep_time.total_seconds()), 2))
+    #every 10 seconds, we want to print the remaining time. We'll use the \b character to overwrite the previous line
+    print(f"\bRemaining time: {sleep_time.total_seconds()} seconds")
     
 #turn off the lights
 stoplight.shutdown()
