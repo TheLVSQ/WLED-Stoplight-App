@@ -12,14 +12,8 @@ from datetime import datetime
 def countdown(seconds):
     start_time = time.time()
     remaining = seconds
-    while remaining >= 0:
-        #Convert to minutes if greater than 60 seconds
-        if remaining >= 60:
-            minutes = int(remaining / 60)
-            seconds = remaining % 60
-            sys.stdout.write(f'\r{minutes} minutes and {seconds} seconds remaining...')
-        else:
-            sys.stdout.write(f'\r{remaining} seconds remaining...')
+    while remaining > 0:
+        sys.stdout.write(f'{remaining} seconds remaining...')
         sys.stdout.flush()  # Ensure the output is updated immediately
         time.sleep(10)  # Wait for 10 seconds
         elapsed = time.time() - start_time
