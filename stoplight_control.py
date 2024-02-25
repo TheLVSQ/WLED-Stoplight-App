@@ -7,6 +7,18 @@ import os
 import logging
 from datetime import datetime
 
+#create a function that will accept a number of seconds and every 10 seconds output to the console
+#the remaining number of seconds. Use the \b character to overwrite the previous line
+def countdown(seconds):
+    start_time = time.time()
+    remaining = seconds
+    while remaining >= 0:
+        sys.stdout.write(f'\r{remaining} seconds remaining...')
+        sys.stdout.flush()  # Ensure the output is updated immediately
+        time.sleep(10)  # Wait for 10 seconds
+        elapsed = time.time() - start_time
+        remaining = seconds - int(elapsed)
+    sys.stdout.write('\rDone!                 \n')  # Overwrite the last line with "Done!"
 
 #log the time and date of start up
 logging.basicConfig(filename='stoplight.log', level=logging.INFO) 
@@ -53,21 +65,22 @@ while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= e
         stoplight.greenlight()
         print("Green light on")
         sleep_time = yellow_light_minute - current_minute
+        countdown(sleep_time.total_seconds())
     elif current_minute >= yellow_light_minute and current_minute < red_light_minute:
         stoplight.yellowlight()
         print("Yellow light on")
         sleep_time = red_light_minute - current_minute
+        countdown(sleep_time.total_seconds())
     elif current_minute >= red_light_minute or current_minute < green_light_minute:
         stoplight.redlight()
         print("Red light on")
         sleep_time = (datetime.strptime("59:59", "%M:%S") - current_minute) if current_minute >= red_light_minute else (green_light_minute - current_minute)
-        
+        countdown(sleep_time.total_seconds())
+
     print(f"Sleeping for {sleep_time.total_seconds()} seconds")
     logging.info(f"Sleeping for {sleep_time.total_seconds()} seconds")
     #Convert the minute value to an integer
     time.sleep(round((sleep_time.total_seconds()), 2))
-    #every 10 seconds, we want to print the remaining time. We'll use the \b character to overwrite the previous line
-    print(f"\bRemaining time: {sleep_time.total_seconds()} seconds")
     
 #turn off the lights
 stoplight.shutdown()
