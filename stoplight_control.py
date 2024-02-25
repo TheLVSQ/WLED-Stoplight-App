@@ -13,7 +13,7 @@ def countdown(seconds):
     start_time = time.time()
     remaining = seconds
     while remaining > 0:
-        print(f'\b{remaining} seconds remaining...')
+        print(f'\r{remaining} seconds remaining...')
         sys.stdout.flush()  # Ensure the output is updated immediately
         time.sleep(10)  # Wait for 10 seconds
         elapsed = time.time() - start_time
