@@ -24,6 +24,12 @@ stoplight = wled.Wled_Strip(config['server_ip'], config['start_time'], config['e
 start_time = config['start_time']
 end_time = config['end_time']
 
+#If execution begins before the start time, wait until the start time
+while time.strftime('%H:%M:%S') < start_time:
+    print(f"Waiting for start time: {start_time}")
+    logging.info(f"Waiting for start time: {start_time}")
+    time.sleep(1)
+
 #run the loop while the current time is between the start and end times
 while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= end_time:
     
