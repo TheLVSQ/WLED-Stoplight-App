@@ -86,8 +86,9 @@ while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= e
     print(f"Sleeping for {sleep_time.total_seconds()} seconds")
     logging.info(f"Sleeping for {sleep_time.total_seconds()} seconds")
     #Convert the minute value to an integer
-    time.sleep(round((sleep_time.total_seconds()), 2))
     countdown(sleep_time.total_seconds())
+    time.sleep(round((sleep_time.total_seconds()), 2))
+    
     
 #turn off the lights
 stoplight.shutdown()
