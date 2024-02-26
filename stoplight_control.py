@@ -7,18 +7,7 @@ import os
 import logging
 from datetime import datetime
 
-#create a function that will accept a number of seconds and every 10 seconds output to the console
-#the remaining number of seconds. Use the \b character to overwrite the previous line
-def countdown(seconds):
-    start_time = time.time()
-    remaining = seconds
-    while remaining > 0:
-        print(f'\r{remaining} seconds remaining...')
-        sys.stdout.flush()  # Ensure the output is updated immediately
-        time.sleep(10)  # Wait for 10 seconds
-        elapsed = time.time() - start_time
-        remaining = seconds - int(elapsed)
-    print('Done!')  # Overwrite the last line with "Done!"
+
 
 #log the time and date of start up
 logging.basicConfig(filename='stoplight.log', level=logging.INFO) 
@@ -39,8 +28,7 @@ end_time = config['end_time']
 #If execution begins before the start time, wait until the start time
 while time.strftime('%H:%M:%S') < start_time:
     print(f"Waiting for start time: {start_time}")
-    logging.info(f"Waiting for start time: {start_time}")
-    time.sleep(1)
+    time.sleep(5)
 
 #run the loop while the current time is between the start and end times
 while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= end_time:
@@ -79,8 +67,7 @@ while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= e
 
     print(f"Sleeping for {sleep_time.total_seconds()} seconds")
     logging.info(f"Sleeping for {sleep_time.total_seconds()} seconds")
-    #Convert the minute value to an integer
-    countdown(sleep_time.total_seconds())
+    #Convert the minute value to an integer and sleep for that many seconds
     time.sleep(round((sleep_time.total_seconds()), 2))
     
     
