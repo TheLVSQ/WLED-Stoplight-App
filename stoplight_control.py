@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta
 
 # Set up logging at info level
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='stoplight.log', level=logging.INFO) 
 
 #Open the config file
 with open('wled_config.json') as f:
@@ -65,6 +65,7 @@ while start_time <= cur_time <= end_time:
         sleep_time = 3540 - (get_current_time().minute * 60 + cur_time.second)
         time.sleep(sleep_time)
         print(f"Sleeping for {sleep_time} seconds")
+    
     elif cur_time.minute == 59:
         stoplight.yellowlight()
         print(f"Yellow Light called at {get_current_time()}")
