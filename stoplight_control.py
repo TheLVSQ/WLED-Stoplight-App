@@ -55,6 +55,7 @@ while start_time <= cur_time <= end_time:
         logging.info(f"Red Light called at {get_current_time()}")
         #calculate the number of seconds until minute 1 and zero seconds and sleep for that amount of time
         sleep_time = 60 - get_current_time().second
+        print(f"Sleeping for {sleep_time} seconds")
         time.sleep(sleep_time)
     
     elif 1 <= cur_time.minute <= 58:
@@ -63,8 +64,9 @@ while start_time <= cur_time <= end_time:
         logging.info(f"Green Light called at {get_current_time()}")
         #calculate the number of seconds until the 59th minute of the hour and sleep for that amount of time
         sleep_time = 3540 - (get_current_time().minute * 60 + cur_time.second)
-        time.sleep(sleep_time)
         print(f"Sleeping for {sleep_time} seconds")
+        time.sleep(sleep_time)
+        
     
     elif cur_time.minute == 59:
         stoplight.yellowlight()
@@ -72,8 +74,9 @@ while start_time <= cur_time <= end_time:
         logging.info(f"Yellow Light called at {get_current_time()}")
         #calculate the number of seconds until the next hour and sleep for that amount of time
         sleep_time = 60 - get_current_time().second
-        time.sleep(sleep_time)
         print(f"Sleeping for {sleep_time} seconds")
+        time.sleep(sleep_time)
+        
     
     cur_time = get_current_time()
 
