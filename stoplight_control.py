@@ -5,13 +5,40 @@ import requests
 import sys 
 import os
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
+import ntplib
+from time import ctime
 
+# Define the next change time based on current time
+def next_change_time(current_time):
+    # Calculate next minute for changes between green, yellow, and red
+    if current_time.minute < 59:
+        # If current minute is less than 59, next change is the next minute
+        next_change = current_time + timedelta(minutes=1)
+        next_change = next_change.replace(second=0)  # Reset seconds to 0 for the start of the minute
+    else:
+        # If current minute is 59, next change is at the top of the next hour
+        next_change = (current_time + timedelta(hours=1)).replace(minute=0, second=0)
+    return next_change
+
+#first, get the current time from the ntp server in EST
+try:
+    c = ntplib.NTPClient()
+    response = c.request('time.nist.gov', version=3)
+    cur_time = datetime.fromtimestamp(response.tx_time)
+    print(f"Current time: {time.strftime('%H:%M:%S')}")
+    logging.info(f"Current time: {time.strftime('%H:%M:%S')}")
+    logging.info(f"Current date: {time.strftime('%m/%d/%Y')}")
+
+except:
+    print("Error getting current time from NTP server")
+    logging.error("Error getting current time from NTP server")
+    cur_time = datetime.now()
 
 
 #log the time and date of start up
 logging.basicConfig(filename='stoplight.log', level=logging.INFO) 
-logging.info(f"Time: {time.strftime('%H:%M:%S')}, Date: {time.strftime('%m/%d/%Y')}")
+logging.info(f"Time: {cur_time.strftime('%H:%M:%S')}, Date: {time.strftime('%m/%d/%Y')}")
 logging.info("Stoplight control script started")
 
 #open the config json file
@@ -21,56 +48,58 @@ with open('wled_config.json') as json_file:
 #create a new instance of the WLED class
 stoplight = wled.Wled_Strip(config['server_ip'], config['start_time'], config['end_time'])
 
-#This script needs to run in a loop during the start and end times from the config file:
-start_time = config['start_time']
-end_time = config['end_time']
+#This script needs to run in a loop during the start and end times from the config file. 
+#They are stored as strings in "HH:MM:SS" format, so we need to convert them to datetime objects
+start_time = datetime.strptime(config['start_time'], '%H:%M:%S')
+end_time = datetime.strptime(config['end_time'], '%H:%M:%S')
 
 #If execution begins before the start time, wait until the start time
-while time.strftime('%H:%M:%S') < start_time:
-    print(f"Waiting for start time: {start_time}")
-    time.sleep(5)
+while True:
+    #update the current time
+    current_time = datetime.now()
+
+    #compare the current time to the start time
+    if current_time < start_time:
+        print(f"Waiting for start time: {start_time}")
+        time.sleep(5)
+    else:
+        break
+    
 
 #run the loop while the current time is between the start and end times
-while time.strftime('%H:%M:%S') >= start_time and time.strftime('%H:%M:%S') <= end_time:
+while current_time >= start_time and current_time <= end_time:
+    #update the current time
+    current_time = datetime.now()
+    next_change = next_change_time(current_time)
     
-    green_light = "01:00"
-    yellow_light = "59:00"
-    red_light = "00:00"
-
-    #define the minute number and seconds that each stage begins at
-    green_light_minute = datetime.strptime(green_light, "%M:%S")
-    yellow_light_minute = datetime.strptime(yellow_light, "%M:%S")
-    red_light_minute = datetime.strptime(red_light, '%M:%S')
+    print(f"Next change: {next_change}")
     
-    #convert the current time to minutes and seconds
-    current_minute = datetime.strptime(datetime.now().strftime('%M:%S'), "%M:%S")
+    current_hour = current_time.hour
+    current_minute = current_time.minute
+    current_second = current_time.second
 
-    print(current_minute)
-    logging.info(f"Time: {time.strftime('%H:%M:%S')}, Date: {time.strftime('%m/%d/%Y')}")
-    logging.info(f"Current minute: {current_minute}")
-
-    if current_minute >= green_light_minute and current_minute < yellow_light_minute:
+    print(current_time)
+    logging.info(f"Time: {current_time}")
+    
+    #if the minute and second of the current time is between XX:01:00 and XX:01:59, turn on the green light
+    
+    if 1 <= current_minute <= 58:
         stoplight.greenlight()
         print("Green light on")
-        sleep_time = yellow_light_minute - current_minute
         
-    elif current_minute >= yellow_light_minute and current_minute < red_light_minute:
+    elif current_minute == 59:
         stoplight.yellowlight()
         print("Yellow light on")
-        sleep_time = red_light_minute - current_minute
-        
-    elif current_minute >= red_light_minute or current_minute < green_light_minute:
+
+    elif current_minute == 0:
         stoplight.redlight()
         print("Red light on")
-        sleep_time = (datetime.strptime("59:59", "%M:%S") - current_minute) if current_minute >= red_light_minute else (green_light_minute - current_minute)
         
+    # Calculate sleep duration as the difference between now and the next change time
+    sleep_duration = (next_change - datetime.now()).total_seconds()
+    print(f"Sleeping for {sleep_duration} seconds until the next change.")
+    time.sleep(sleep_duration)
 
-    print(f"Sleeping for {sleep_time.total_seconds()} seconds")
-    logging.info(f"Sleeping for {sleep_time.total_seconds()} seconds")
-    #Convert the minute value to an integer and sleep for that many seconds
-    time.sleep(round((sleep_time.total_seconds()), 2))
-    
-    
 #turn off the lights
 stoplight.shutdown()
 logging.info("Stoplight control script stopped at " + time.strftime('%H:%M:%S'))
