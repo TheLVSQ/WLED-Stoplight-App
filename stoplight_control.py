@@ -6,7 +6,6 @@ import sys
 import os
 import logging
 from datetime import datetime, timedelta
-import ntplib
 from time import ctime
 
 # Define the next change time based on current time
@@ -21,19 +20,8 @@ def next_change_time(current_time):
         next_change = (current_time + timedelta(hours=1)).replace(minute=0, second=0)
     return next_change
 
-#first, get the current time from the ntp server in EST
-try:
-    c = ntplib.NTPClient()
-    response = c.request('time.nist.gov', version=3)
-    cur_time = datetime.fromtimestamp(response.tx_time)
-    print(f"Current time: {time.strftime('%H:%M:%S')}")
-    logging.info(f"Current time: {time.strftime('%H:%M:%S')}")
-    logging.info(f"Current date: {time.strftime('%m/%d/%Y')}")
-
-except:
-    print("Error getting current time from NTP server")
-    logging.error("Error getting current time from NTP server")
-    cur_time = datetime.now()
+#get the current time
+cur_time = datetime.now()
 
 
 #log the time and date of start up
