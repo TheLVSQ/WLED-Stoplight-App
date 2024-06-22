@@ -18,8 +18,8 @@ def get_light_info():
     return config['server_ip']
 
 def yellowlight(server_ip):
-        on_segment = 1
-        off_segments = [2, 3]
+        on_segment = 2
+        off_segments = [1, 3]
         colors= ["faf620", "000000", "000000"]
         activate_color(server_ip, on_segment, off_segments, colors)
 

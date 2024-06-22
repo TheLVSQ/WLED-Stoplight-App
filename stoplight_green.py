@@ -20,8 +20,8 @@ def get_light_info():
     return config['server_ip']
 
 def greenlight(server_ip):
-        on_segment = 1
-        off_segments = [2, 3]
+        on_segment = 3
+        off_segments = [1, 2]
         colors= ["37e704", "000000", "000000"]
         activate_color(server_ip, on_segment, off_segments, colors)
 
