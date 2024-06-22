@@ -5,14 +5,17 @@ import time
 import logging
 from stoplight_main import activate_color
 
-logger = logging.basicConfig(filename='stoplight_red.log', level=logging.INFO)
+#create a logging object
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 def get_light_info():
     #Open the config file
     with open('wled_config.json') as f:
         config = json.load(f)
 
-    logger.info(f"config reqtrieved: {config}")
+    #log the config data
+    logger.info(f"Config data: {config}")
 
     return config['server_ip']
 
