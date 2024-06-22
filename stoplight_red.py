@@ -23,7 +23,7 @@ def redlight(server_ip):
         on_segment = 1
         off_segments = [2, 3]
         colors= ["f00101", "000000", "000000"]
-        activate_color(on_segment, off_segments, colors)
+        activate_color(server_ip, on_segment, off_segments, colors)
 
 if __name__ == "__main__":
     
