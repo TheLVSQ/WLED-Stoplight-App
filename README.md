@@ -11,11 +11,19 @@ A simple custom app to control a WLED lightstrip in a friend's coffee shop.
 python config_creator.py
 ```
 
-3. Run the stoplight_control.py script to start the app:
+3. Edit your cron schedule to run the lights at specific times
 
 ```bash
-python stoplight_control.py
+crontab -e
 ```
+
+example:
+'''
+0 * * * * cd ~/WLED-Stoplight-App && stoplight-red.py
+'''
+
+The light will change to the color of the script called at the specific time.
+
 
 That's it! The app should be running now.
 

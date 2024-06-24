@@ -1,4 +1,4 @@
-import wled_light as wled 
+import deprecated.wled_light as wled 
 import time
 import json 
 import requests
